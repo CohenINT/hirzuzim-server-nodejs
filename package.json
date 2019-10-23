@@ -1,0 +1,11 @@
+{
+  "name": "hirzuzim-server-nodejs",
+  "version": "1.0.0",
+  "description": "This is the server side for the CRUD application for the angular project hirzuzim to handle requests",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Moshe .c.",
+  "license": "ISC"
+}
