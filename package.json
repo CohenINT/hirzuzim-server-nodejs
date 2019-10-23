@@ -4,8 +4,14 @@
   "description": "This is the server side for the CRUD application for the angular project hirzuzim to handle requests",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon main"
   },
   "author": "Moshe .c.",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "nodemon": "^1.19.4"
+  }
 }
