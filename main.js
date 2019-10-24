@@ -49,18 +49,43 @@ function checkFileType(file,cb){
 
 const app = express();
 
+// Public Folder
+app.use(express.static('./hirzuzim-angular'));
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PATCH, DELETE, OPTIONS"
+    );
+    res.header("Origin","http://localhost:4200");
+    next();
+  });
+
+  
 app.post("/addFile",(req,res)=>{
   upload(req,res,(err)=>{
+
+
       if(err){
-          res.end("ERROR IN UPLOADING.  Details:  "+err);
+          res.send("ERROR IN UPLOADING.  Details:  "+err);
       }
       else{
           if(req.file == undefined)
           {
-              res.end("ERROR: NO FILE SELECTED");
+              res.send("ERROR: NO FILE SELECTED");
           }
           else{
-              res.end("File Uploaded!");
+
+              res.render("http://localhost:4200/",{
+
+               msg:"File Uploaded!",
+               file: `files/${req.file.filename}`
+            });
           }
       }
 
