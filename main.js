@@ -2,6 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const path = require("path");
 const colors= require("colors");
+var cors = require("cors");
+
 //Set the Storage engine
 const Storage = multer.diskStorage({
 destination:'./files/',
@@ -21,7 +23,7 @@ const upload = multer({
     fileFilter: function(req,file,cb){
         checkFileType(file,cb);
     }
-}).single("myfile");
+}).array("myfile");
 
 
 // Check File Type
@@ -49,43 +51,52 @@ function checkFileType(file,cb){
 
 const app = express();
 
-// Public Folder
-app.use(express.static('./hirzuzim-angular'));
+app.use(cors());
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PATCH, DELETE, OPTIONS"
-    );
-    res.header("Origin","http://localhost:4200");
-    next();
-  });
 
-  
-app.post("/addFile",(req,res)=>{
+
+// // Public Folder
+// app.use(express.static('./hirzuzim-angular'));
+
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header(
+//       "Access-Control-Allow-Headers",
+//       "Origin, X-Requested-With, Content-Type, Accept"
+//     );
+//     res.header(
+//       "Access-Control-Allow-Methods",
+//       "GET, POST, PATCH, DELETE, OPTIONS"
+//     );
+//     res.header("Origin","http://localhost:4200");
+//     next();
+//   });
+
+app.use('/files', express.static('files'));
+
+
+app.post("/hizruz",(req,res)=>{
   upload(req,res,(err)=>{
 
 
       if(err){
-          res.send("ERROR IN UPLOADING.  Details:  "+err);
+          console.log(`error in uploading, details:  ${err.field}`.red);
+          console.log(err);
+          console.log("___req___");
+          console.log(req);
+          console.log("____req_____");
+          res.end("ERROR IN UPLOADING.  Details:  "+err);
       }
       else{
           if(req.file == undefined)
           {
-              res.send("ERROR: NO FILE SELECTED");
+            console.log("error- no file selected".red);
+
+              res.end("ERROR: NO FILE SELECTED");
           }
           else{
-
-              res.render("http://localhost:4200/",{
-
-               msg:"File Uploaded!",
-               file: `files/${req.file.filename}`
-            });
+              console.log("sucess!".yellow);
+                            res.redirect("http://localhost:4200/");
           }
       }
 
