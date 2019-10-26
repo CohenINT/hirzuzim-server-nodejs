@@ -3,10 +3,23 @@ const multer = require("multer");
 const path = require("path");
 const colors= require("colors");
 var cors = require("cors");
+const mongoose = require("mongoose");
+
 
 const domainLocation = "www.moshe-cohen.biz/apps/apps";
 const localLocation = "C:\\Users\\moshe\\source\\repos";
 const currentLocation = localLocation;
+
+//DB Config
+const db= require("./config/keys").mongoURI;
+
+//Connect MongoDB
+mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true}).then(() =>{
+ console.log("MongoDB Database Connected.".bgBlue.yellow);
+}).catch(err=>console.log(err));
+
+
+
 //Set the Storage engine
 const Storage = multer.diskStorage({
     destination:'./files/',
@@ -68,7 +81,9 @@ app.use(cors());
 
 app.use('/files', express.static('files'));
 
-
+//TODO: put it in a seperate hizruzim.js file
+//[un comment this once ready]
+//app.use("/hizruzim",hizruzim);
 app.post("/hizruz",(req,res)=>{
   upload(req,res,(err)=>{
 
@@ -99,6 +114,7 @@ app.post("/hizruz",(req,res)=>{
   });//end of Upload object defintion
 
 });//end of .post()
+///////////////////////////////////
 
 const port = 4400;
 app.listen(port,()=>{
