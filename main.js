@@ -4,14 +4,19 @@ const path = require("path");
 const colors= require("colors");
 var cors = require("cors");
 
+const domainLocation = "www.moshe-cohen.biz/apps/apps";
+const localLocation = "C:\\Users\\moshe\\source\\repos";
+const currentLocation = localLocation;
 //Set the Storage engine
 const Storage = multer.diskStorage({
-destination:'./files/',
-filename: function(req,file,cb){
-    cb(null,file.filename + "-" + Date.now() + path.extname(file.originalname));
+    destination:'./files/',
+    filename: function(req,file,cb){
+        
 
-}
-});
+        cb(null,file.originalname + "-" + Date.now() + path.extname(file.originalname));
+    
+    }
+    });
 
 
 //Init upload to files folder
@@ -32,8 +37,13 @@ function checkFileType(file,cb){
     const  fileTypes = /wav|mp3|mp4|ogg/;
 
     //Check ext
+  
     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
 
+    //Link to location
+     generatedLink = currentLocation+"\\hirzuzim-server-nodejs\\files\\"+file.originalname;
+
+   
     //Check mime
     const mimetype = fileTypes.test(file.mimetype);
 
@@ -55,22 +65,6 @@ app.use(cors());
 
 
 
-// // Public Folder
-// app.use(express.static('./hirzuzim-angular'));
-
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header(
-//       "Access-Control-Allow-Headers",
-//       "Origin, X-Requested-With, Content-Type, Accept"
-//     );
-//     res.header(
-//       "Access-Control-Allow-Methods",
-//       "GET, POST, PATCH, DELETE, OPTIONS"
-//     );
-//     res.header("Origin","http://localhost:4200");
-//     next();
-//   });
 
 app.use('/files', express.static('files'));
 
@@ -78,24 +72,26 @@ app.use('/files', express.static('files'));
 app.post("/hizruz",(req,res)=>{
   upload(req,res,(err)=>{
 
-
       if(err){
           console.log(`error in uploading, details:  ${err.field}`.red);
-          console.log(err);
-          console.log("___req___");
-          console.log(req);
-          console.log("____req_____");
           res.end("ERROR IN UPLOADING.  Details:  "+err);
       }
-      else{
-          if(req.file == undefined)
+      else{ 
+          if(req.files == undefined)
           {
             console.log("error- no file selected".red);
-
+             
               res.end("ERROR: NO FILE SELECTED");
           }
           else{
               console.log("sucess!".yellow);
+              //TODO: insert into MongoDB database the fullname and link to the location.
+
+               
+              //
+
+            //  console.log(req.body["firstname"]);
+              
                             res.redirect("http://localhost:4200/");
           }
       }
@@ -108,3 +104,7 @@ const port = 4400;
 app.listen(port,()=>{
 console.log('Server started on port 4400'.yellow);
 });
+
+
+
+
