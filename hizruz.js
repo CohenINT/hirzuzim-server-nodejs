@@ -70,7 +70,7 @@ const db= require("./config/keys").mongoURI;
 
 
 //Create Schema 
-const HizruzSchema = new Schema({
+const Hizruz = new Schema({
 
    firstname:{
        type:String,
@@ -92,19 +92,34 @@ const HizruzSchema = new Schema({
 
 
 
-
     function insertQuery(_data)
     {
     //Connect MongoDB
-    mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true}).then(() =>{
+  //  mongoose.connection.db.collection()
+
+
+  mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true},)
+    
+    .then(() =>{
+
         console.log("MongoDB Database Connected.".bgBlue.yellow);
         //TODO: insert query
-
+           
+          mongoose.Hizruzim.insert({
+              firstName:_data.firstname,
+              lastName:_data.lastname,
+              fileLink:_data.filelink
+          });
           console.log('_data "inserted".');
-
+           
         //
-       }).catch(err=>console.log(err));
+       }).catch(err=>console.log(err)).finally(()=>{
+        mongoose.disconnect();
+        console.log("DB connection disconneted.");
        
+
+       });
+
     
     }
 
@@ -138,15 +153,14 @@ router.post("/",(req,res)=>{
                 //  console.log(req.body["firstname"]);
                 //   console.log(req.files.forEach(...))
 
-                // let _data = {
-                //     fileLink:[
-                //      "wwww.moshe-cohen.biz\4.mp3",
-                //       "www.moshe-cohen.biz\2.mp3"            
-                //               ],
-                //     firstname="moshe",
-                //     lastname:"cohen"
-                // };
-                //insertQuery(_data);
+                let _data = {
+                    filelink:[
+                              req.files[0]          
+                              ],
+                    firstname:req.body["firstname"],
+                    lastname:req.body["lastname"]
+                };
+                insertQuery(_data);
                  
                 
   
