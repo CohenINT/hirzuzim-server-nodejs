@@ -1,15 +1,7 @@
 const express = require("express");
 var cors = require("cors");
-const hizruz  = require("./hizruz");
+const hizruz  = require("./core/hizruz");
 const colors= require("colors");
-
-
-
-
-
-
-
-
 
 
 //Init app
@@ -27,7 +19,6 @@ app.use('/files', express.static('files'));
 
 app.use("/hizruz",hizruz);
 
-///////////////////////////////////
 
 const port = 4400;
 app.listen(port,()=>{
